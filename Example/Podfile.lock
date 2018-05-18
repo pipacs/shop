@@ -1,16 +1,35 @@
 PODS:
-  - Shop (0.1.0)
+  - KeychainSwift (7.0.1)
+  - PromiseKit (6.2.7):
+    - PromiseKit/CorePromise (= 6.2.7)
+    - PromiseKit/Foundation (= 6.2.7)
+    - PromiseKit/UIKit (= 6.2.7)
+  - PromiseKit/CorePromise (6.2.7)
+  - PromiseKit/Foundation (6.2.7):
+    - PromiseKit/CorePromise
+  - PromiseKit/UIKit (6.2.7):
+    - PromiseKit/CorePromise
+  - Shop (0.1.0):
+    - KeychainSwift (~> 7.0)
+    - PromiseKit (~> 6.2)
 
 DEPENDENCIES:
   - Shop (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - KeychainSwift
+    - PromiseKit
 
 EXTERNAL SOURCES:
   Shop:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Shop: 7252a64fc2285e2fda255f9132be4a6131f875bf
+  KeychainSwift: 7e15d26b1d6fc504a5eadb89a3e8ab17b2d3573a
+  PromiseKit: 12b9d87748b170714247d8b2677146ca57e488f2
+  Shop: 423309589005299090fa36c97ebb785ea8702910
 
-PODFILE CHECKSUM: 7c7619cc1aaf1dcf1824ffbcda4fb094dd2d3051
+PODFILE CHECKSUM: 141a5293cfc5ef7cec58429e8e732296ff01db6f
 
 COCOAPODS: 1.5.2

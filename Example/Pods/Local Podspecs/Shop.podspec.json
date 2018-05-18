@@ -1,22 +1,30 @@
 {
   "name": "Shop",
   "version": "0.1.0",
-  "summary": "A short description of Shop.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/Akos Polster/Shop",
+  "summary": "Simple StoreKit wrapper",
+  "description": "Simple StoreKit wrapper. Requires PromiseKit",
+  "homepage": "https://github.com/pipacs/shop",
   "license": {
-    "type": "MIT",
+    "type": "BSD",
     "file": "LICENSE"
   },
   "authors": {
     "Akos Polster": "akos@pipacs.com"
   },
   "source": {
-    "git": "https://github.com/Akos Polster/Shop.git",
+    "git": "https://github.com/pipacs/shop.git",
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "10.0"
   },
-  "source_files": "Shop/Classes/**/*"
+  "source_files": "Shop/Classes/**/*",
+  "dependencies": {
+    "PromiseKit": [
+      "~> 6.2"
+    ],
+    "KeychainSwift": [
+      "~> 7.0"
+    ]
+  }
 }

@@ -1,11 +1,12 @@
+# Copyright (c) Akos Polster. All rights reserved.
+
 use_frameworks!
+platform :ios, '10.0'
 
 target 'Shop_Example' do
   pod 'Shop', :path => '../'
 
   target 'Shop_Tests' do
     inherit! :search_paths
-
-    
   end
 end

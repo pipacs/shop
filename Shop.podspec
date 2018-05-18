@@ -1,42 +1,20 @@
 #
-# Be sure to run `pod lib lint Shop.podspec' to ensure this is a
-# valid spec before submitting.
-#
-# Any lines starting with a # are optional, but their use is encouraged
-# To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
+# Copyright (c) Akos Polster. All rights reserved.
 #
 
 Pod::Spec.new do |s|
-  s.name             = 'Shop'
-  s.version          = '0.1.0'
-  s.summary          = 'A short description of Shop.'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
-
-  s.description      = <<-DESC
-TODO: Add long description of the pod here.
-                       DESC
-
-  s.homepage         = 'https://github.com/Akos Polster/Shop'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
-  s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Akos Polster' => 'akos@pipacs.com' }
-  s.source           = { :git => 'https://github.com/Akos Polster/Shop.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
-
-  s.ios.deployment_target = '8.0'
-
+  s.name = 'Shop'
+  s.version = '0.1.0'
+  s.summary = 'Simple StoreKit wrapper'
+  s.description = <<-DESC
+Simple StoreKit wrapper. Requires PromiseKit
+DESC
+  s.homepage = 'https://github.com/pipacs/shop'
+  s.license = { :type => 'BSD', :file => 'LICENSE' }
+  s.author = { 'Akos Polster' => 'akos@pipacs.com' }
+  s.source = { :git => 'https://github.com/pipacs/shop.git', :tag => s.version.to_s }
+  s.ios.deployment_target = '10.0'
   s.source_files = 'Shop/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'Shop' => ['Shop/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+  s.dependency 'PromiseKit', '~> 6.2'
+  s.dependency 'KeychainSwift', '~> 7.0'
 end
