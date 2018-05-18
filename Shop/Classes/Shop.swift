@@ -10,15 +10,26 @@ import StoreKit
 
 /// A shop with products to purchase
 public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver, SKRequestDelegate {
+    /// Framework domain
     public static let domain = "com.pipacs.Shop"
+    
+    /// Product ID is invalid
     public static let ErrorInvalidProduct = NSError(domain: domain, code: 1)
+    
+    /// Another purchase is pending
     public static let ErrorPurchasePending = NSError(domain: domain, code: 2)
     
     /// App Store receipt is missing or invalid
-    public static let ErrorReceipt = NSError(domain, code: 3)
+    public static let ErrorReceipt = NSError(domain: domain, code: 3)
     
     /// Transaction (purchase or restoring purchases) failed
-    public static let ErrorTransaction = NSError(domain, code: 4)
+    public static let ErrorTransaction = NSError(domain: domain, code: 4)
+    
+    /// Non-consumable product IDs
+    public let nonConsumableProductIds: Set<String>
+    
+    /// Consumable product IDs
+    public let consumableProductIds: Set<String>
 
     /// Available products, indexed by product ID
     public private(set) var products: [String: SKProduct] = [:]
@@ -29,14 +40,30 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     private var receiptRefreshRequests: [SKReceiptRefreshRequest] = []
     private var pendingReceiptRefreshes: [PendingPromise<Void>] = []
     private let keychain = KeychainSwift(keyPrefix: Shop.domain)
-    private let productIds: Set<String>
+    private let receiptVerifier: ((String, URL) -> Bool)?
+    private let receiptURL: URL?
 
-    public required init(productIds: Set<String>) {
+    /// Initializer
+    ///
+    /// - Parameters:
+    ///   - consumableProductIds: Set of consumable product IDs
+    ///   - nonConsumableProductIds: Set of non-consumable product IDs
+    ///   - receiptURL: Location of the App Store receipt
+    ///   - receiptVerifier: Method verifying the given product ID in the App Store receipt
+    public required init(
+        consumableProductIds: Set<String> = Set(),
+        nonConsumableProductIds: Set<String> = Set(),
+        receiptURL: URL? = nil,
+        receiptVerifier: ((String, URL) -> Bool)? = nil
+    ) {
         Log()
-        self.productIds = productIds
+        self.consumableProductIds = consumableProductIds
+        self.nonConsumableProductIds = nonConsumableProductIds
+        self.receiptURL = receiptURL
+        self.receiptVerifier = receiptVerifier
         super.init()
         SKPaymentQueue.default().add(self)
-        let request = SKProductsRequest(productIdentifiers: productIds)
+        let request = SKProductsRequest(productIdentifiers: consumableProductIds.union(nonConsumableProductIds))
         request.delegate = self
         productsRequests.append(request)
         request.start()
@@ -67,6 +94,22 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         return pendingPurchase.promise
     }
     
+    /// Consume a consumable product
+    @discardableResult
+    public func consume(productId: String) -> Bool {
+        if !consumableProductIds.contains(productId) {
+            Log("Attempting to consume a non-consumable product")
+            return false
+        }
+        let cnt = count(of: productId)
+        if cnt < 1 {
+            Log("No more products to consume")
+            return false
+        }
+        setCount(of: productId, cnt - 1)
+        return true
+    }
+    
     /// Restore the App Store receipt, then the purchases
     func restorePurchases() -> Promise<Void> {
         Log()
@@ -84,13 +127,13 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     }
 
     public func removeAllPurchases() {
-        for id in productIds {
+        for id in consumableProductIds.union(nonConsumableProductIds) {
             keychain.set(0, forKey: id)
         }
     }
 
     public func purchaseAll() {
-        for id in productIds {
+        for id in consumableProductIds.union(nonConsumableProductIds) {
             keychain.set(1, forKey: id)
         }
     }
@@ -150,17 +193,20 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
             case .purchased:
                 Log("Purchased")
                 queue.finishTransaction(transaction)
-                if !verifyReceipt(productId: productId) {
+                if let url = receiptURL, receiptVerifier?(productId, url) == false {
                     pendingPurchase.resolver.reject(Shop.ErrorReceipt)
                 } else {
-                    let count = keychain.getInt(productId) ?? 0
-                    keychain.set(count + 1, forKey: productId)
+                    if nonConsumableProductIds.contains(productId) {
+                        setCount(of: productId, 1)
+                    } else {
+                        setCount(of: productId, count(of: productId) + 1)
+                    }
                     pendingPurchase.resolver.fulfill(())
                 }
             case .restored:
                 Log("Restored")
                 queue.finishTransaction(transaction)
-                if !verifyReceipt(productId: productId) {
+                if let url = receiptURL, receiptVerifier?(productId, url) == false {
                     keychain.set(0, forKey: productId)
                     pendingPurchase.resolver.reject(Shop.ErrorReceipt)
                 } else {
@@ -181,7 +227,10 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     /// Promise refreshing the receipt of all IAPs
     private func refreshReceipt() -> Promise<Void> {
         Log()
-        if let receiptURL = Bundle.main.appStoreReceiptURL, let isReachable = try? receiptURL.checkResourceIsReachable(), isReachable {
+        guard let receiptURL = receiptURL else {
+            return .value(())
+        }
+        if let isReachable = try? receiptURL.checkResourceIsReachable(), isReachable {
             return .value(())
         }
         let pending = Promise<Void>.pending()
@@ -202,12 +251,8 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         return pendingRestore.promise
     }
     
-    /// Verify if the App Store receipt contains a given product ID
-    private func verifyReceipt(productId: String) -> Bool {
-        Log()
-        guard let receipt = AppStoreReceipt() else {
-            return false
-        }
-        return receipt.contains(productId: productId)
+    /// Set the count of a product ID
+    private func setCount(of productId: String, _ count: Int) {
+        keychain.set(count, forKey: productId)
     }
 }
