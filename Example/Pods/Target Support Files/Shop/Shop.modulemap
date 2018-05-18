@@ -1,0 +1,6 @@
+framework module Shop {
+  umbrella header "Shop-umbrella.h"
+
+  export *
+  module * { export * }
+}

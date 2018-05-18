@@ -1,0 +1,16 @@
+PODS:
+  - Shop (0.1.0)
+
+DEPENDENCIES:
+  - Shop (from `../`)
+
+EXTERNAL SOURCES:
+  Shop:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Shop: 7252a64fc2285e2fda255f9132be4a6131f875bf
+
+PODFILE CHECKSUM: 7c7619cc1aaf1dcf1824ffbcda4fb094dd2d3051
+
+COCOAPODS: 1.5.2
