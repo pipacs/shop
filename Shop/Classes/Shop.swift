@@ -116,7 +116,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     /// Restore purchases
     /// - Note: If the App Store receipt URL (set in ```init```) is non-nil,
     /// this method will attempt to restore the receipt first
-    func restorePurchases() -> Promise<Void> {
+    public func restorePurchases() -> Promise<Void> {
         Log()
         return Promise { seal in
             firstly { () -> Promise<Void> in
@@ -131,15 +131,20 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         }
     }
 
-    public func removeAllPurchases() {
+    /// Remove all local product instances
+    public func removeAllPurchasesLocally() {
         for id in consumableProductIds.union(nonConsumableProductIds) {
-            keychain.set(0, forKey: id)
+            setCount(of: id, 0)
         }
     }
 
-    public func purchaseAll() {
-        for id in consumableProductIds.union(nonConsumableProductIds) {
-            keychain.set(1, forKey: id)
+    /// Set all non-consumable product instance counts to 1, increment all consumable product instance counts
+    public func purchaseAllLocally() {
+        for id in consumableProductIds {
+            setCount(of: id, count(of: id) + 1)
+        }
+        for id in nonConsumableProductIds {
+            setCount(of: id, 1)
         }
     }
     
