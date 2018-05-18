@@ -1,6 +1,10 @@
 # Shop
 
-[![CI Status](https://img.shields.io/travis/Akos Polster/Shop.svg?style=flat)](https://travis-ci.org/Akos Polster/Shop)
+_Copyright &copy; Akos Polster. All rights reserved._
+
+
+
+[![CI Status](https://img.shields.io/travis/pipacs/Shop.svg?style=flat)](https://travis-ci.org/pipacs/Shop)
 [![Version](https://img.shields.io/cocoapods/v/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
 [![License](https://img.shields.io/cocoapods/l/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
 [![Platform](https://img.shields.io/cocoapods/p/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
@@ -26,4 +30,4 @@ Akos Polster, akos@pipacs.com
 
 ## License
 
-Shop is available under the MIT license. See the LICENSE file for more info.
+Shop is available under the BSD "Simplified" license. See the LICENSE file for more info.
