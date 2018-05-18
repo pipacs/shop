@@ -4,7 +4,7 @@ _Copyright &copy; Akos Polster. All rights reserved._
 
 
 
-[![CI Status](https://img.shields.io/travis/pipacs/Shop.svg?style=flat)](https://travis-ci.org/pipacs/Shop)
+[![CI Status](https://img.shields.io/travis/pipacs/shop.svg?style=flat)](https://travis-ci.org/pipacs/shop)
 [![Version](https://img.shields.io/cocoapods/v/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
 [![License](https://img.shields.io/cocoapods/l/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
 [![Platform](https://img.shields.io/cocoapods/p/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
