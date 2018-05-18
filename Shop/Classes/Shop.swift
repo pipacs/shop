@@ -69,14 +69,17 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         request.start()
     }
 
+    /// Does the user have one or more instances of the given product
     public func has(productId: String) -> Bool {
         return count(of: productId) > 0
     }
 
+    /// Current count of a given product
     public func count(of productId: String) -> Int {
         return keychain.getInt(productId) ?? 0
     }
     
+    /// Purchase a product
     public func purchase(productId: String) -> Promise<Void> {
         Log("\(productId)")
         guard let product = products[productId] else {
@@ -94,7 +97,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         return pendingPurchase.promise
     }
     
-    /// Consume a consumable product
+    /// Consume an instance of a consumable product
     @discardableResult
     public func consume(productId: String) -> Bool {
         if !consumableProductIds.contains(productId) {
@@ -110,7 +113,9 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         return true
     }
     
-    /// Restore the App Store receipt, then the purchases
+    /// Restore purchases
+    /// - Note: If the App Store receipt URL (set in ```init```) is non-nil,
+    /// this method will attempt to restore the receipt first
     func restorePurchases() -> Promise<Void> {
         Log()
         return Promise { seal in
