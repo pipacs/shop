@@ -1,6 +1,7 @@
 # Copyright (c) Akos Polster. All rights reserved.
 
 platform :ios, '10.0'
+use_frameworks!
 
 target 'Shop_Example' do
   pod 'Shop', :path => '../'

@@ -25,10 +25,6 @@
     ],
     "KeychainSwift": [
       "~> 7.0"
-    ],
-    "openssl-ios-bitcode": [
-      "~> 1.0"
     ]
-  },
-  "static_framework": true
+  }
 }
