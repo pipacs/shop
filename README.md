@@ -1,8 +1,8 @@
 # Shop
 
+Simple _PromiseKit_ wrapper around _StoreKit_.
+
 _Copyright &copy; Akos Polster. All rights reserved._
-
-
 
 [![CI Status](https://img.shields.io/travis/pipacs/shop.svg?style=flat)](https://travis-ci.org/pipacs/shop)
 [![Version](https://img.shields.io/cocoapods/v/Shop.svg?style=flat)](https://cocoapods.org/pods/Shop)
