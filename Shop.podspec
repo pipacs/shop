@@ -17,4 +17,6 @@ DESC
   s.source_files = 'Shop/Classes/**/*'
   s.dependency 'PromiseKit', '~> 6.2'
   s.dependency 'KeychainSwift', '~> 7.0'
+  s.dependency 'openssl-ios-bitcode', '~> 1.0'
+  s.static_framework = true
 end

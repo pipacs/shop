@@ -1,5 +1,6 @@
 PODS:
   - KeychainSwift (7.0.1)
+  - openssl-ios-bitcode (1.0.212)
   - PromiseKit (6.2.7):
     - PromiseKit/CorePromise (= 6.2.7)
     - PromiseKit/Foundation (= 6.2.7)
@@ -11,6 +12,7 @@ PODS:
     - PromiseKit/CorePromise
   - Shop (0.1.0):
     - KeychainSwift (~> 7.0)
+    - openssl-ios-bitcode (~> 1.0)
     - PromiseKit (~> 6.2)
 
 DEPENDENCIES:
@@ -19,6 +21,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - KeychainSwift
+    - openssl-ios-bitcode
     - PromiseKit
 
 EXTERNAL SOURCES:
@@ -27,9 +30,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   KeychainSwift: 7e15d26b1d6fc504a5eadb89a3e8ab17b2d3573a
+  openssl-ios-bitcode: fe7e8209f9f9fe17557da4da45e8577e3cea09af
   PromiseKit: 12b9d87748b170714247d8b2677146ca57e488f2
-  Shop: 423309589005299090fa36c97ebb785ea8702910
+  Shop: 0b0300a9cd8e1a83c14cff06b6f2c488167eee2a
 
-PODFILE CHECKSUM: 141a5293cfc5ef7cec58429e8e732296ff01db6f
+PODFILE CHECKSUM: 6b0bd72d388190eb2f454e5b488963077d7fc51c
 
 COCOAPODS: 1.5.2
