@@ -34,14 +34,14 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     /// Available products, indexed by product ID
     public private(set) var products: [String: SKProduct] = [:]
     
-    private var pendingRestores: [PendingPromise<Void>] = []
-    private var pendingPurchases: [String: PendingPromise<Void>] = [:]
-    private var productsRequests: [SKProductsRequest] = []
-    private var receiptRefreshRequests: [SKReceiptRefreshRequest] = []
-    private var pendingReceiptRefreshes: [PendingPromise<Void>] = []
-    private let keychain = KeychainSwift(keyPrefix: Shop.domain)
-    private let receiptVerifier: ((String, URL) -> Bool)?
-    private let receiptURL: URL?
+    var pendingRestores: [PendingPromise<Void>] = []
+    var pendingPurchases: [String: PendingPromise<Void>] = [:]
+    var productsRequests: [SKProductsRequest] = []
+    var receiptRefreshRequests: [SKReceiptRefreshRequest] = []
+    var pendingReceiptRefreshes: [PendingPromise<Void>] = []
+    let keychain = KeychainSwift(keyPrefix: Shop.domain)
+    let receiptVerifier: ((String, URL) -> Bool)?
+    let receiptURL: URL?
 
     /// Initializer
     ///
@@ -176,7 +176,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     public func request(_ request: SKRequest, didFailWithError error: Error) {
         Log("Request \(request): \(error)")
         if request.isKind(of: SKProductsRequest.self) {
-            Log("Removing producs")
+            Log("Removing products")
             self.products.removeAll()
         } else if request.isKind(of: SKReceiptRefreshRequest.self) {
             Log("Rejecting receipt requests")
@@ -206,11 +206,8 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
                 if let url = receiptURL, receiptVerifier?(productId, url) == false {
                     pendingPurchase.resolver.reject(Shop.errorReceipt)
                 } else {
-                    if nonConsumableProductIds.contains(productId) {
-                        setCount(of: productId, 1)
-                    } else {
-                        setCount(of: productId, count(of: productId) + 1)
-                    }
+                    let quantity = transaction.payment.quantity
+                    setCount(of: productId, count(of: productId) + quantity)
                     pendingPurchase.resolver.fulfill(())
                 }
             case .restored:
@@ -220,7 +217,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
                     keychain.set(0, forKey: productId)
                     pendingPurchase.resolver.reject(Shop.errorReceipt)
                 } else {
-                    keychain.set(1, forKey: productId)
+                    keychain.set(transaction.payment.quantity, forKey: productId)
                     pendingPurchase.resolver.fulfill(())
                 }
             case .purchasing:
@@ -232,10 +229,10 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         }
     }
     
-    // MARK: - Private
+    // MARK: - Internal
     
     /// Promise refreshing the receipt of all IAPs
-    private func refreshReceipt() -> Promise<Void> {
+    func refreshReceipt() -> Promise<Void> {
         Log()
         guard let receiptURL = receiptURL else {
             return .value(())
@@ -253,7 +250,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     }
     
     /// Restore purchases only
-    private func doRestorePurchases() -> Promise<Void> {
+    func doRestorePurchases() -> Promise<Void> {
         Log()
         SKPaymentQueue.default().restoreCompletedTransactions()
         let pendingRestore = Promise<Void>.pending()
@@ -262,7 +259,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     }
     
     /// Set the count of a product ID
-    private func setCount(of productId: String, _ count: Int) {
+    func setCount(of productId: String, _ count: Int) {
         keychain.set(count, forKey: productId)
     }
 }
