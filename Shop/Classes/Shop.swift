@@ -14,16 +14,16 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     public static let domain = "com.pipacs.Shop"
     
     /// Product ID is invalid
-    public static let ErrorInvalidProduct = NSError(domain: domain, code: 1)
+    public static let errorInvalidProduct = NSError(domain: domain, code: 1)
     
     /// Another purchase is pending
-    public static let ErrorPurchasePending = NSError(domain: domain, code: 2)
+    public static let errorPurchasePending = NSError(domain: domain, code: 2)
     
-    /// App Store receipt is missing or invalid
-    public static let ErrorReceipt = NSError(domain: domain, code: 3)
+    /// App Store receipt verification failed
+    public static let errorReceipt = NSError(domain: domain, code: 3)
     
     /// Transaction (purchase or restoring purchases) failed
-    public static let ErrorTransaction = NSError(domain: domain, code: 4)
+    public static let errorTransaction = NSError(domain: domain, code: 4)
     
     /// Non-consumable product IDs
     public let nonConsumableProductIds: Set<String>
@@ -83,10 +83,10 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
     public func purchase(productId: String) -> Promise<Void> {
         Log("\(productId)")
         guard let product = products[productId] else {
-            return Promise(error: Shop.ErrorInvalidProduct)
+            return Promise(error: Shop.errorInvalidProduct)
         }
         if let oldPendingPurchase = pendingPurchases[productId], oldPendingPurchase.promise.isPending {
-            return Promise(error: Shop.ErrorPurchasePending)
+            return Promise(error: Shop.errorPurchasePending)
         }
 
         let pendingPurchase = Promise<Void>.pending()
@@ -199,12 +199,12 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
             case .failed:
                 Log("Failed: \(String(describing: transaction.error))")
                 queue.finishTransaction(transaction)
-                pendingPurchase.resolver.reject(transaction.error ?? Shop.ErrorTransaction)
+                pendingPurchase.resolver.reject(transaction.error ?? Shop.errorTransaction)
             case .purchased:
                 Log("Purchased")
                 queue.finishTransaction(transaction)
                 if let url = receiptURL, receiptVerifier?(productId, url) == false {
-                    pendingPurchase.resolver.reject(Shop.ErrorReceipt)
+                    pendingPurchase.resolver.reject(Shop.errorReceipt)
                 } else {
                     if nonConsumableProductIds.contains(productId) {
                         setCount(of: productId, 1)
@@ -218,7 +218,7 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
                 queue.finishTransaction(transaction)
                 if let url = receiptURL, receiptVerifier?(productId, url) == false {
                     keychain.set(0, forKey: productId)
-                    pendingPurchase.resolver.reject(Shop.ErrorReceipt)
+                    pendingPurchase.resolver.reject(Shop.errorReceipt)
                 } else {
                     keychain.set(1, forKey: productId)
                     pendingPurchase.resolver.fulfill(())
