@@ -1,4 +1,6 @@
-# references:
+# Copyright (c) Akos Polster. All rights reserved.
+#
+# References:
 # * https://www.objc.io/issues/6-build-tools/travis-ci/
 # * https://github.com/supermarin/xcpretty#usage
 

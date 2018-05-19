@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.version = '0.1.0'
   s.summary = 'Simple StoreKit wrapper'
   s.description = <<-DESC
-Simple StoreKit wrapper. Requires PromiseKit
+Simple PromiseKit wrapper around StoreKit.
 DESC
   s.homepage = 'https://github.com/pipacs/shop'
   s.license = { :type => 'BSD', :file => 'LICENSE' }
