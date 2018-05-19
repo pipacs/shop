@@ -9,7 +9,7 @@ import PromiseKit
 import StoreKit
 
 /// A shop with products to purchase
-public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver, SKRequestDelegate {
+open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserver, SKRequestDelegate {
     /// Framework domain
     public static let domain = "com.pipacs.Shop"
     
