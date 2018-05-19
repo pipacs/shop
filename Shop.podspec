@@ -15,6 +15,6 @@ DESC
   s.source = { :git => 'https://github.com/pipacs/shop.git', :tag => s.version.to_s }
   s.ios.deployment_target = '10.0'
   s.source_files = 'Shop/Classes/**/*'
-  s.dependency 'PromiseKit', '~> 6.2'
+  s.dependency 'PromiseKit/CorePromise', '~> 6.2'
   s.dependency 'KeychainSwift', '~> 7.0'
 end

@@ -2,7 +2,7 @@
   "name": "Shop",
   "version": "0.1.0",
   "summary": "Simple StoreKit wrapper",
-  "description": "Simple StoreKit wrapper. Requires PromiseKit",
+  "description": "Simple PromiseKit wrapper around StoreKit.",
   "homepage": "https://github.com/pipacs/shop",
   "license": {
     "type": "BSD",
@@ -20,7 +20,7 @@
   },
   "source_files": "Shop/Classes/**/*",
   "dependencies": {
-    "PromiseKit": [
+    "PromiseKit/CorePromise": [
       "~> 6.2"
     ],
     "KeychainSwift": [

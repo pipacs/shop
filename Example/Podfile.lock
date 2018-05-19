@@ -1,17 +1,9 @@
 PODS:
   - KeychainSwift (7.0.1)
-  - PromiseKit (6.2.7):
-    - PromiseKit/CorePromise (= 6.2.7)
-    - PromiseKit/Foundation (= 6.2.7)
-    - PromiseKit/UIKit (= 6.2.7)
   - PromiseKit/CorePromise (6.2.7)
-  - PromiseKit/Foundation (6.2.7):
-    - PromiseKit/CorePromise
-  - PromiseKit/UIKit (6.2.7):
-    - PromiseKit/CorePromise
   - Shop (0.1.0):
     - KeychainSwift (~> 7.0)
-    - PromiseKit (~> 6.2)
+    - PromiseKit/CorePromise (~> 6.2)
 
 DEPENDENCIES:
   - Shop (from `../`)
@@ -28,7 +20,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   KeychainSwift: 7e15d26b1d6fc504a5eadb89a3e8ab17b2d3573a
   PromiseKit: 12b9d87748b170714247d8b2677146ca57e488f2
-  Shop: 423309589005299090fa36c97ebb785ea8702910
+  Shop: 6f3a135446d7e76cafbfc8cc9008bab9d6037c00
 
 PODFILE CHECKSUM: bff12d5866e2a4a877efdb01db3fb6d3989851f6
 
