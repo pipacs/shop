@@ -13,7 +13,7 @@ DESC
   s.license = { :type => 'BSD', :file => 'LICENSE' }
   s.author = { 'Akos Polster' => 'akos@pipacs.com' }
   s.source = { :git => 'https://github.com/pipacs/shop.git', :tag => s.version.to_s }
-  s.ios.deployment_target = '10.0'
+  s.platforms = { :ios => "10.0", :tvos => "10.0" }
   s.source_files = 'Shop/Classes/**/*'
   s.dependency 'PromiseKit/CorePromise', '~> 6.2'
   s.dependency 'KeychainSwift', '~> 7.0'
