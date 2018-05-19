@@ -60,21 +60,71 @@ class Tests: XCTestCase {
         override func finishTransaction(_ transaction: SKPaymentTransaction) {}
     }
     
+    func testReceiptValidation() {
+        let url = Bundle.main.bundleURL
+        let s = Shop(receiptURL: url) { (productId, url) -> Bool in
+            NSLog("Verifying '\(productId)'")
+            return productId == "foo"
+        }
+        s.setCount(of: "foo", 0)
+        s.setCount(of: "bar", 0)
+        let pendingFoo = Promise<Void>.pending()
+        let pendingBar = Promise<Void>.pending()
+        s.pendingPurchases["foo"] = pendingFoo
+        s.pendingPurchases["bar"] = pendingBar
+        let t1 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .purchased)
+        let t2 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "bar"), transactionState: .purchased)
+        let t3 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .restored)
+        let t4 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "bar"), transactionState: .restored)
+        let q = TestPaymentQueue()
+        
+        s.paymentQueue(q, updatedTransactions: [t1, t2, t3, t4])
+        
+        XCTAssertEqual(s.count(of: "foo"), 1)
+        XCTAssertEqual(s.count(of: "bar"), 0)
+        XCTAssertEqual(pendingFoo.promise.isResolved, true)
+        XCTAssertEqual(pendingBar.promise.isRejected, true)
+    }
+    
     func testUpdatingTransactions() {
         let s = Shop(consumableProductIds: ["foo", "bar"])
         s.removeAllPurchasesLocally()
-        s.pendingPurchases["foo"] = Promise<Void>.pending()
-        s.pendingPurchases["bar"] = Promise<Void>.pending()
+        let pendingFoo = Promise<Void>.pending()
+        let pendingBar = Promise<Void>.pending()
+        s.pendingPurchases["foo"] = pendingFoo
+        s.pendingPurchases["bar"] = pendingBar
         let t1 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .purchased)
         let t2 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "bar"), transactionState: .failed)
         let t3 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "baz"), transactionState: .failed)
-        s.paymentQueue(TestPaymentQueue(), updatedTransactions: [t1, t2, t3])
-        XCTAssertEqual(s.pendingPurchases["foo"]?.promise.isResolved, true)
+        let q = TestPaymentQueue()
+        
+        s.paymentQueue(q, updatedTransactions: [t1, t2, t3])
+        XCTAssertEqual(pendingFoo.promise.isResolved, true)
         XCTAssertEqual(s.count(of: "foo"), 1)
-        XCTAssertEqual(s.pendingPurchases["bar"]?.promise.isRejected, true)
+        XCTAssertEqual(pendingBar.promise.isRejected, true)
         XCTAssertEqual(s.count(of: "bar"), 0)
-        s.paymentQueue(TestPaymentQueue(), updatedTransactions: [t1])
+        XCTAssertTrue(s.pendingPurchases.isEmpty)
+        
+        s.paymentQueue(q, updatedTransactions: [t1])
+        XCTAssertEqual(s.count(of: "foo"), 2)
+        
+        let t4 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .restored)
+        s.setCount(of: "foo", 0)
+        s.paymentQueue(q, updatedTransactions: [t4])
         XCTAssertEqual(s.count(of: "foo"), 1)
+        
+        s.removeAllPurchasesLocally()
+        let t5 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .purchasing)
+        s.paymentQueue(q, updatedTransactions: [t5])
+        XCTAssertEqual(s.count(of: "foo"), 0)
+        
+        let pendingFoo1 = Promise<Void>.pending()
+        s.pendingPurchases["foo"] = pendingFoo1
+        let t6 = TestPaymentTransaction(payment: TestPayment(productIdentifier: "foo"), transactionState: .deferred)
+        s.paymentQueue(q, updatedTransactions: [t6])
+        XCTAssertEqual(s.count(of: "foo"), 0)
+        XCTAssertTrue(s.pendingPurchases.isEmpty)
+        XCTAssertTrue(pendingFoo.promise.isFulfilled)
     }
 
     func testProductsResponse() {

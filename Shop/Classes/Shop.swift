@@ -189,42 +189,38 @@ public class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObse
         Log()
         for transaction in transactions {
             let productId = transaction.payment.productIdentifier
-            guard let pendingPurchase = self.pendingPurchases[productId] else {
-                continue
-            }
-            if !pendingPurchase.promise.isPending {
-                continue
-            }
+            let pendingPurchase = pendingPurchases[productId]
             switch transaction.transactionState {
             case .failed:
-                Log("Failed: \(String(describing: transaction.error))")
+                Log("Failed '\(productId)': \(String(describing: transaction.error))")
+                pendingPurchase?.resolver.reject(transaction.error ?? Shop.errorTransaction)
+                pendingPurchases.removeValue(forKey: productId)
                 queue.finishTransaction(transaction)
-                pendingPurchase.resolver.reject(transaction.error ?? Shop.errorTransaction)
             case .purchased:
-                Log("Purchased")
-                queue.finishTransaction(transaction)
+                Log("Purchased '\(productId)'")
                 if let url = receiptURL, receiptVerifier?(productId, url) == false {
-                    pendingPurchase.resolver.reject(Shop.errorReceipt)
+                    pendingPurchase?.resolver.reject(Shop.errorReceipt)
                 } else {
                     let quantity = transaction.payment.quantity
                     setCount(of: productId, count(of: productId) + quantity)
-                    pendingPurchase.resolver.fulfill(())
+                    pendingPurchase?.resolver.fulfill(())
                 }
-            case .restored:
-                Log("Restored")
+                pendingPurchases.removeValue(forKey: productId)
                 queue.finishTransaction(transaction)
+            case .restored:
+                Log("Restored '\(productId)'")
                 if let url = receiptURL, receiptVerifier?(productId, url) == false {
                     keychain.set(0, forKey: productId)
-                    pendingPurchase.resolver.reject(Shop.errorReceipt)
                 } else {
                     keychain.set(transaction.payment.quantity, forKey: productId)
-                    pendingPurchase.resolver.fulfill(())
                 }
+                queue.finishTransaction(transaction)
             case .purchasing:
-                Log("Purchasing")
+                Log("Purchasing '\(productId)'")
             case .deferred:
-                Log("Deferred")
-                pendingPurchase.resolver.fulfill(())
+                Log("Deferred '\(productId)'")
+                pendingPurchase?.resolver.fulfill(())
+                pendingPurchases.removeValue(forKey: productId)
             }
         }
     }
