@@ -1,6 +1,6 @@
 {
   "name": "Shop",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "summary": "Simple StoreKit wrapper",
   "description": "Simple PromiseKit wrapper around StoreKit.",
   "homepage": "https://github.com/pipacs/shop",
@@ -13,10 +13,11 @@
   },
   "source": {
     "git": "https://github.com/pipacs/shop.git",
-    "tag": "0.1.0"
+    "tag": "0.1.2"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0",
+    "tvos": "11.0"
   },
   "source_files": "Shop/Classes/**/*",
   "dependencies": {
@@ -24,7 +25,7 @@
       "~> 6.2"
     ],
     "KeychainSwift": [
-      "~> 7.0"
+      "~> 15.0"
     ]
   }
 }

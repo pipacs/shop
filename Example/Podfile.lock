@@ -1,8 +1,8 @@
 PODS:
-  - KeychainSwift (7.0.1)
-  - PromiseKit/CorePromise (6.2.7)
-  - Shop (0.1.0):
-    - KeychainSwift (~> 7.0)
+  - KeychainSwift (15.0.0)
+  - PromiseKit/CorePromise (6.8.4)
+  - Shop (0.1.2):
+    - KeychainSwift (~> 15.0)
     - PromiseKit/CorePromise (~> 6.2)
 
 DEPENDENCIES:
@@ -18,10 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  KeychainSwift: 7e15d26b1d6fc504a5eadb89a3e8ab17b2d3573a
-  PromiseKit: 12b9d87748b170714247d8b2677146ca57e488f2
-  Shop: 6f3a135446d7e76cafbfc8cc9008bab9d6037c00
+  KeychainSwift: c6fc018d287804faf1ce3f258a1e51a7178c8382
+  PromiseKit: 51794a832647e7b819336dc2279039ce9f1cc49b
+  Shop: 296ad2261c4053f9fc5bb06d380ddb2cd1093e59
 
-PODFILE CHECKSUM: bff12d5866e2a4a877efdb01db3fb6d3989851f6
+PODFILE CHECKSUM: ac3e980af61e5aab0035485e6176d372e1cd1f3d
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.6.0

@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name = 'Shop'
-  s.version = '0.1.0'
+  s.version = '0.1.2'
   s.summary = 'Simple StoreKit wrapper'
   s.description = <<-DESC
 Simple PromiseKit wrapper around StoreKit.
@@ -13,8 +13,8 @@ DESC
   s.license = { :type => 'BSD', :file => 'LICENSE' }
   s.author = { 'Akos Polster' => 'akos@pipacs.com' }
   s.source = { :git => 'https://github.com/pipacs/shop.git', :tag => s.version.to_s }
-  s.platforms = { :ios => "10.0", :tvos => "10.0" }
+  s.platforms = { :ios => "11.0", :tvos => "11.0" }
   s.source_files = 'Shop/Classes/**/*'
   s.dependency 'PromiseKit/CorePromise', '~> 6.2'
-  s.dependency 'KeychainSwift', '~> 7.0'
+  s.dependency 'KeychainSwift', '~> 15.0'
 end

@@ -70,17 +70,17 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
     }
 
     /// Does the user have one or more instances of the given product
-    public func has(productId: String) -> Bool {
+    open func has(productId: String) -> Bool {
         return count(of: productId) > 0
     }
 
     /// Current count of a given product
-    public func count(of productId: String) -> Int {
+    open func count(of productId: String) -> Int {
         return keychain.getInt(productId) ?? 0
     }
     
     /// Purchase a product
-    public func purchase(productId: String) -> Promise<Void> {
+    open func purchase(productId: String) -> Promise<Void> {
         Log("\(productId)")
         guard let product = products[productId] else {
             return Promise(error: Shop.errorInvalidProduct)
@@ -99,7 +99,7 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
     
     /// Consume an instance of a consumable product
     @discardableResult
-    public func consume(productId: String) -> Bool {
+    open func consume(productId: String) -> Bool {
         if !consumableProductIds.contains(productId) {
             Log("Attempting to consume a non-consumable product")
             return false
@@ -116,7 +116,7 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
     /// Restore purchases
     /// - Note: If the App Store receipt URL (set in ```init```) is non-nil,
     /// this method will attempt to restore the receipt first
-    public func restorePurchases() -> Promise<Void> {
+    open func restorePurchases() -> Promise<Void> {
         Log()
         return Promise { seal in
             firstly { () -> Promise<Void> in
@@ -132,14 +132,14 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
     }
 
     /// Remove all local product instances
-    public func removeAllPurchasesLocally() {
+    open func removeAllPurchasesLocally() {
         for id in consumableProductIds.union(nonConsumableProductIds) {
             setCount(of: id, 0)
         }
     }
 
     /// Set all non-consumable product instance counts to 1, increment all consumable product instance counts
-    public func purchaseAllLocally() {
+    open func purchaseAllLocally() {
         for id in consumableProductIds {
             setCount(of: id, count(of: id) + 1)
         }
@@ -221,6 +221,8 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
                 Log("Deferred '\(productId)'")
                 pendingPurchase?.resolver.fulfill(())
                 pendingPurchases.removeValue(forKey: productId)
+            @unknown default:
+                assertionFailure("Unknown transaction state \(transaction.transactionState)")
             }
         }
     }
