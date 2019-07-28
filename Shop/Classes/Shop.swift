@@ -118,16 +118,10 @@ open class Shop: NSObject, SKProductsRequestDelegate, SKPaymentTransactionObserv
     /// this method will attempt to restore the receipt first
     open func restorePurchases() -> Promise<Void> {
         Log()
-        return Promise { seal in
-            firstly { () -> Promise<Void> in
-                self.refreshReceipt()
-            }.then { _ -> Promise<Void> in
-                self.doRestorePurchases()
-            }.done {
-                seal.fulfill(())
-            }.catch { error in
-                seal.reject(error)
-            }
+        return firstly { () -> Promise<Void> in
+            self.refreshReceipt()
+        }.then { _ -> Promise<Void> in
+            self.doRestorePurchases()
         }
     }
 
