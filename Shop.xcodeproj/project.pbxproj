@@ -11,8 +11,8 @@
 		9638AD442301CC32001E4044 /* KeychainSwift+Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9638AD402301CC32001E4044 /* KeychainSwift+Shop.swift */; };
 		9638AD452301CC32001E4044 /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9638AD412301CC32001E4044 /* Shop.swift */; };
 		9638AD462301CC32001E4044 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9638AD422301CC32001E4044 /* Log.swift */; };
-		9638AD4A2301CC68001E4044 /* KeychainSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9638AD482301CC68001E4044 /* KeychainSwift.framework */; };
-		9638AD4B2301CC68001E4044 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9638AD492301CC68001E4044 /* PromiseKit.framework */; };
+		9638AD4A2301CC68001E4044 /* KeychainSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9638AD482301CC68001E4044 /* KeychainSwift.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		9638AD4B2301CC68001E4044 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9638AD492301CC68001E4044 /* PromiseKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		964C69A82301CAA000348D55 /* Shop.h in Headers */ = {isa = PBXBuildFile; fileRef = 964C69A62301CAA000348D55 /* Shop.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
@@ -308,6 +308,7 @@
 				);
 				INFOPLIST_FILE = Shop/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -339,6 +340,7 @@
 				);
 				INFOPLIST_FILE = Shop/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
