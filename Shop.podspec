@@ -4,11 +4,12 @@
 
 Pod::Spec.new do |s|
   s.name = 'Shop'
-  s.version = '0.1.2'
+  s.version = '1.0.0'
   s.summary = 'Simple StoreKit wrapper'
   s.description = <<-DESC
 Simple PromiseKit wrapper around StoreKit.
 DESC
+  s.swift_version = "5"
   s.homepage = 'https://github.com/pipacs/shop'
   s.license = { :type => 'BSD', :file => 'LICENSE' }
   s.author = { 'Akos Polster' => 'akos@pipacs.com' }
